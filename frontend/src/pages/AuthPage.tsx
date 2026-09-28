@@ -10,7 +10,10 @@ import { FieldError } from '../components/ui';
 
 const DEMO_ACCOUNT = { username: 'demo', password: 'Demo@1234' };
 const EXAMPLE_LONG_URL =
-  'https://www.synerry.com/th/news/digital-government-platform-launch-2026?utm_source=line&utm_medium=social';
+  'https://www.synerry.com/?utm_source=line&utm_medium=social&utm_campaign=digital-government-2026';
+const EXAMPLE_CODE = 'synerry';
+const EXAMPLE_SHORT_URL = `${__SHORT_BASE_URL__}/${EXAMPLE_CODE}`;
+const EXAMPLE_SHORT_HOST = new URL(__SHORT_BASE_URL__).host;
 const EXAMPLE_DAILY_CLICKS = [18, 26, 21, 34, 29, 47, 70];
 
 export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
@@ -184,8 +187,10 @@ function LinkSpecimen() {
       <div className="specimen-reveal flex items-center gap-5">
         <div className="min-w-0 flex-1">
           <p className="text-sm text-white/70">{t('auth.exampleShort')}</p>
-          <p className="mt-1 text-4xl font-bold tracking-tight">
-            <span className="text-brand">/</span>launch
+          <p className="mt-1 truncate text-lg text-white/80">{EXAMPLE_SHORT_HOST}</p>
+          <p className="text-4xl font-bold tracking-tight">
+            <span className="text-brand">/</span>
+            {EXAMPLE_CODE}
           </p>
           <div className="mt-4 flex items-end gap-1.5" aria-hidden>
             {EXAMPLE_DAILY_CLICKS.map((n, i) => (
@@ -199,7 +204,7 @@ function LinkSpecimen() {
           <p className="mt-2 text-sm text-white/70">{t('auth.exampleClicks', { total })}</p>
         </div>
         <div className="shrink-0 rounded-xl bg-white p-2.5">
-          <QRCodeSVG value="https://www.synerry.com/th/" size={96} fgColor="#1b2340" />
+          <QRCodeSVG value={EXAMPLE_SHORT_URL} size={96} fgColor="#1b2340" />
         </div>
       </div>
       <figcaption className="mt-5 text-xs text-white/60">{t('auth.example')}</figcaption>
