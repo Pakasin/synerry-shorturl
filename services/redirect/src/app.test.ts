@@ -53,7 +53,7 @@ describe('happy path', () => {
     const res = await open('/synerry', {
       'user-agent': 'Mozilla/5.0 (iPhone)',
       referer: 'https://www.facebook.com/',
-      'x-forwarded-for': '203.0.113.9, 10.0.0.1',
+      'x-forwarded-for': '198.51.100.7, 203.0.113.9',
     });
     expect(res.status).toBe(302);
     expect(res.headers.get('location')).toBe('https://www.synerry.com');
@@ -67,6 +67,11 @@ describe('happy path', () => {
       userAgent: 'Mozilla/5.0 (iPhone)',
       referer: 'https://www.facebook.com/',
     });
+  });
+
+  it('trusts the proxy-set client IP header over a spoofed x-forwarded-for', async () => {
+    await open('/synerry', { 'true-client-ip': '203.0.113.20', 'x-forwarded-for': '8.8.8.8' });
+    expect(JSON.parse(String(clickCalls[0].init.body)).ip).toBe('203.0.113.20');
   });
 
   it('finishes saving the click BEFORE sending the redirect', async () => {

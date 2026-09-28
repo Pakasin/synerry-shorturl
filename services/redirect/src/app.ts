@@ -1,6 +1,5 @@
 import { Hono, type Context } from 'hono';
-import { getConnInfo } from '@hono/node-server/conninfo';
-import { buildHealth, createLogger } from '@synerry/shared';
+import { buildHealth, clientIp, createLogger } from '@synerry/shared';
 import { config } from './config';
 import { lookupLink, recordClick } from './upstream';
 import { renderPage, type PageKind } from './pages';
@@ -8,16 +7,6 @@ import { renderPage, type PageKind } from './pages';
 const log = createLogger('redirect');
 
 const CODE_PATTERN = /^[A-Za-z0-9_-]{1,30}$/;
-
-function clientIp(c: Context): string | undefined {
-  const forwarded = c.req.header('x-forwarded-for')?.split(',')[0]?.trim();
-  if (forwarded) return forwarded;
-  try {
-    return getConnInfo(c).remote.address;
-  } catch {
-    return undefined;
-  }
-}
 
 function errorPage(c: Context, kind: PageKind, status: 403 | 404 | 410 | 503) {
   c.header('Cache-Control', 'no-store');

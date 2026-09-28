@@ -1,11 +1,11 @@
 import { createMiddleware } from 'hono/factory';
-import { apiError } from '@synerry/shared';
+import { apiError, clientIp } from '@synerry/shared';
 
 export function rateLimit(opts: { max: number; windowMs: number }) {
   const hits = new Map<string, { count: number; resetAt: number }>();
 
   return createMiddleware(async (c, next) => {
-    const ip = c.req.header('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const ip = clientIp(c) ?? 'unknown';
     const now = Date.now();
     const entry = hits.get(ip);
     if (!entry || entry.resetAt <= now) {
