@@ -1,0 +1,15 @@
+# โฟลเดอร์ dependency ที่ติดตั้งจาก npm ไม่ต้องเก็บใน git
+node_modules/
+# ผลลัพธ์จากการ build
+dist/
+# ไฟล์ตั้งค่าที่มีรหัสผ่านจริง ห้าม commit
+.env
+.env.local
+# ไฟล์ log ต่างๆ
+*.log
+npm-debug.log*
+# ไฟล์ระบบของ OS และ editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

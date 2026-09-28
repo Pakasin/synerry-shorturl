@@ -1,0 +1,29 @@
+{
+  "name": "@synerry/analytics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env --import tsx src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file-if-exists=.env src/db/migrate.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "@synerry/shared": "*",
+    "drizzle-orm": "^0.45.3",
+    "fast-geoip": "^1.1.88",
+    "hono": "^4.13.9",
+    "postgres": "^3.4.9",
+    "ua-parser-js": "^1.0.41",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/ua-parser-js": "^0.7.39",
+    "drizzle-kit": "^0.31.11",
+    "vitest": "^5.0.2"
+  }
+}

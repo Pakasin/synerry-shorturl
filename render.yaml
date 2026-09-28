@@ -1,0 +1,78 @@
+# Render Blueprint: สร้าง 3 web service จากไฟล์นี้ไฟล์เดียว (Render Dashboard > New > Blueprint)
+# ค่าที่เป็น sync: false คือค่าที่ Render จะถามตอนสร้าง (connection string ของ Neon และ URL ของ service อื่น)
+
+# ค่าที่ทุก service ใช้ร่วมกัน
+envVarGroups:
+  - name: synerry-shared
+    envVars:
+      # key ลับที่ service ใช้เรียกกันเอง Render สุ่มให้ครั้งเดียว ทุก service ได้ค่าเดียวกัน
+      - key: INTERNAL_API_KEY
+        generateValue: true
+      # โหมด production (cookie เป็นแบบ Secure)
+      - key: NODE_ENV
+        value: production
+
+services:
+  # gateway: หน้าเว็บ + REST API (ฐานข้อมูล gateway_db)
+  - type: web
+    name: synerry-gateway
+    runtime: node
+    plan: free
+    region: singapore
+    # ติดตั้งรวม devDependencies (ต้องใช้ vite ตอน build และ tsx ตอนรัน) แล้ว build หน้าเว็บ
+    buildCommand: npm ci --include=dev && npm run build:web
+    # รัน migration ก่อนเปิด service ทุกครั้ง (รันซ้ำได้ ไม่มีผลถ้าไม่มี migration ใหม่)
+    startCommand: npm run db:migrate -w @synerry/gateway && npm run start -w @synerry/gateway
+    healthCheckPath: /health
+    envVars:
+      - fromGroup: synerry-shared
+      # connection string ของฐานข้อมูล gateway_db บน Neon
+      - key: DATABASE_URL
+        sync: false
+      # URL สาธารณะของ redirect service เช่น https://synerry-redirect.onrender.com
+      - key: SHORT_BASE_URL
+        sync: false
+      # URL ของ analytics service
+      - key: ANALYTICS_URL
+        sync: false
+
+  # redirect: เปิดลิงก์สั้นแล้วพาไปปลายทาง (ไม่มีฐานข้อมูล)
+  - type: web
+    name: synerry-redirect
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci --include=dev
+    startCommand: npm run start -w @synerry/redirect
+    healthCheckPath: /health
+    envVars:
+      - fromGroup: synerry-shared
+      # URL ของ gateway (ใช้ค้นลิงก์ และเป็นหน้าเว็บหลัก)
+      - key: GATEWAY_URL
+        sync: false
+      - key: APP_URL
+        sync: false
+      # URL ของ analytics
+      - key: ANALYTICS_URL
+        sync: false
+
+  # analytics: บันทึกคลิกและสถิติ (ฐานข้อมูล analytics_db)
+  - type: web
+    name: synerry-analytics
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci --include=dev
+    startCommand: npm run db:migrate -w @synerry/analytics && npm run start -w @synerry/analytics
+    healthCheckPath: /health
+    envVars:
+      - fromGroup: synerry-shared
+      # connection string ของฐานข้อมูล analytics_db บน Neon
+      - key: DATABASE_URL
+        sync: false
+      # salt สำหรับ hash IP สุ่มครั้งเดียว ห้ามเปลี่ยนภายหลัง
+      - key: IP_HASH_SALT
+        generateValue: true
+      # ตัดวันในกราฟตามเวลาไทย
+      - key: STATS_TIMEZONE
+        value: Asia/Bangkok
