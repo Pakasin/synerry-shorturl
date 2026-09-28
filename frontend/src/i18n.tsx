@@ -1,10 +1,7 @@
-// นำเข้าฟังก์ชันของ React สำหรับ context state และ memo
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
-// ภาษาที่รองรับ
 export type Lang = 'th' | 'en';
 
-// ข้อความภาษาไทย (เป็นต้นแบบ ภาษาอื่นต้องมี key ครบเท่านี้)
 const th = {
   'app.tagline': 'ย่อลิงก์ สร้าง QR Code และดูสถิติการคลิก',
   'nav.overview': 'ภาพรวม',
@@ -46,7 +43,8 @@ const th = {
   'auth.noAccount': 'ยังไม่มีบัญชี?',
   'auth.demo': 'บัญชีทดลอง:',
   'shorten.title': 'ย่อลิงก์ให้สั้น พร้อม QR สำหรับแชร์และพิมพ์',
-  'shorten.subtitle': 'วาง URL ที่ยาวเกินจะส่งต่อ ได้ลิงก์สั้นกับ QR Code ทันที แล้วกลับมาดูได้ว่ามีคนเปิดกี่ครั้ง จากที่ไหน',
+  'shorten.subtitle':
+    'วาง URL ที่ยาวเกินจะส่งต่อ ได้ลิงก์สั้นกับ QR Code ทันที แล้วกลับมาดูได้ว่ามีคนเปิดกี่ครั้ง จากที่ไหน',
   'shorten.urlLabel': 'URL ที่ต้องการย่อ',
   'shorten.urlPlaceholder': 'วาง URL ที่ต้องการย่อ เช่น https://www.synerry.com',
   'shorten.submit': 'ย่อลิงก์',
@@ -180,11 +178,13 @@ const th = {
   'tour.welcome.title': 'ยินดีต้อนรับสู่ Synerry Short URL',
   'tour.welcome.body': 'ใช้เวลาไม่ถึงนาที ดูว่าย่อลิงก์ แชร์ QR Code และดูสถิติการคลิกได้ที่ไหน',
   'tour.url.title': 'เริ่มจากวางลิงก์ที่นี่',
-  'tour.url.body': 'วาง URL ที่ยาวแล้วกด "ย่อลิงก์" จะได้ลิงก์สั้นพร้อม QR Code ทันที คัดลอกหรือดาวน์โหลด QR ไปใช้ได้เลย',
+  'tour.url.body':
+    'วาง URL ที่ยาวแล้วกด "ย่อลิงก์" จะได้ลิงก์สั้นพร้อม QR Code ทันที คัดลอกหรือดาวน์โหลด QR ไปใช้ได้เลย',
   'tour.options.title': 'ตั้งชื่อลิงก์และกำหนดเวลาได้',
   'tour.options.body': 'ตั้งชื่อท้ายลิงก์เอง (alias) ใส่แท็กไว้จัดกลุ่ม หรือกำหนดวันเริ่มและวันหมดอายุของลิงก์',
   'tour.history.title': 'ลิงก์ทั้งหมดอยู่ที่นี่',
-  'tour.history.body': 'ค้นหา กรองตามแท็ก ดูยอดคลิก เปิดหน้าสถิติเพื่อดูกราฟ ประเทศ อุปกรณ์ และดาวน์โหลดเป็น CSV หรือ Excel',
+  'tour.history.body':
+    'ค้นหา กรองตามแท็ก ดูยอดคลิก เปิดหน้าสถิติเพื่อดูกราฟ ประเทศ อุปกรณ์ และดาวน์โหลดเป็น CSV หรือ Excel',
   'tour.trash.title': 'ลบผิด กู้คืนได้',
   'tour.trash.body': 'ลิงก์ที่ลบจะอยู่ในถังขยะ 30 วัน กู้คืนได้ก่อนถูกลบถาวร',
   'tour.prefs.title': 'เลือกภาษาและธีม',
@@ -225,7 +225,8 @@ const th = {
   'admin.linksLast7Days': 'ลิงก์ใหม่ใน 7 วัน',
   'admin.blockedDomains': 'โดเมนที่บล็อก',
   'admin.totalClicks': 'คลิกทั้งระบบ',
-  'admin.overviewHint': 'ใช้หน้าผู้ใช้เพื่อระงับบัญชีที่สร้างลิงก์หลอกลวง ใช้หน้าลิงก์ทั้งหมดเพื่อระงับลิงก์ที่ถูกรายงาน และใช้ Blocklist เพื่อกันไม่ให้ใครย่อลิงก์ไปเว็บอันตราย',
+  'admin.overviewHint':
+    'ใช้หน้าผู้ใช้เพื่อระงับบัญชีที่สร้างลิงก์หลอกลวง ใช้หน้าลิงก์ทั้งหมดเพื่อระงับลิงก์ที่ถูกรายงาน และใช้ Blocklist เพื่อกันไม่ให้ใครย่อลิงก์ไปเว็บอันตราย',
   'admin.searchUsers': 'ค้นหาชื่อผู้ใช้',
   'admin.colUser': 'ผู้ใช้',
   'admin.colRole': 'บทบาท',
@@ -239,7 +240,8 @@ const th = {
   'admin.suspend': 'ระงับบัญชี',
   'admin.unsuspend': 'เปิดบัญชีคืน',
   'admin.suspendTitle': 'ระงับบัญชี {name}?',
-  'admin.suspendMessage': '{name} จะถูกออกจากระบบทุกเครื่องทันที login ไม่ได้ และลิงก์ทั้งหมดของบัญชีนี้จะหยุดทำงาน เปิดบัญชีคืนได้ภายหลัง',
+  'admin.suspendMessage':
+    '{name} จะถูกออกจากระบบทุกเครื่องทันที login ไม่ได้ และลิงก์ทั้งหมดของบัญชีนี้จะหยุดทำงาน เปิดบัญชีคืนได้ภายหลัง',
   'admin.suspendedToast': 'ระงับบัญชีแล้ว',
   'admin.unsuspendedToast': 'เปิดบัญชีคืนแล้ว',
   'admin.you': '(คุณ)',
@@ -256,7 +258,8 @@ const th = {
   'admin.lockedToast': 'ระงับลิงก์แล้ว',
   'admin.unlockedToast': 'ยกเลิกการระงับแล้ว',
   'admin.blockTitle': 'บล็อกโดเมน',
-  'admin.blockHint': 'ใส่ชื่อโดเมนหรือวาง URL เต็มก็ได้ ระบบจะบล็อกโดเมนนั้นและ subdomain ทั้งหมด มีผลทันทีทั้งลิงก์ใหม่และลิงก์เดิม',
+  'admin.blockHint':
+    'ใส่ชื่อโดเมนหรือวาง URL เต็มก็ได้ ระบบจะบล็อกโดเมนนั้นและ subdomain ทั้งหมด มีผลทันทีทั้งลิงก์ใหม่และลิงก์เดิม',
   'admin.blockDomain': 'โดเมน',
   'admin.blockDomainPlaceholder': 'เช่น phishing-site.com',
   'admin.blockReason': 'เหตุผล (ไม่บังคับ)',
@@ -270,10 +273,8 @@ const th = {
   'admin.addedBy': 'เพิ่มโดย {name} เมื่อ {date}',
 };
 
-// ชนิดของ key ข้อความ ใช้ตรวจตอน compile ว่าเรียกใช้ key ที่มีอยู่จริง
 export type MessageKey = keyof typeof th;
 
-// ข้อความภาษาอังกฤษ ต้องมีครบทุก key (TypeScript จะแจ้ง error ถ้าขาด)
 const en: Record<MessageKey, string> = {
   'app.tagline': 'Shorten links, create QR codes and track clicks',
   'nav.overview': 'Overview',
@@ -315,7 +316,8 @@ const en: Record<MessageKey, string> = {
   'auth.noAccount': "Don't have an account?",
   'auth.demo': 'Demo account:',
   'shorten.title': 'Short links with a QR code, ready to share or print',
-  'shorten.subtitle': 'Paste a URL that is too long to pass around. Get a short link and QR code instantly, then see how many people opened it and from where.',
+  'shorten.subtitle':
+    'Paste a URL that is too long to pass around. Get a short link and QR code instantly, then see how many people opened it and from where.',
   'shorten.urlLabel': 'URL to shorten',
   'shorten.urlPlaceholder': 'Paste a URL, e.g. https://www.synerry.com',
   'shorten.submit': 'Shorten',
@@ -343,7 +345,8 @@ const en: Record<MessageKey, string> = {
   'dashboard.activeLinks': 'Active links',
   'dashboard.totalClicks': 'Total clicks',
   'dashboard.clicksHint': 'Excludes bots and chat-app link previews',
-  'dashboard.analyticsDown': 'Statistics are temporarily unavailable. Click counts will appear when the service is back.',
+  'dashboard.analyticsDown':
+    'Statistics are temporarily unavailable. Click counts will appear when the service is back.',
   'dashboard.topLinks': 'Most clicked links',
   'dashboard.viewAll': 'View all',
   'dashboard.noClicks': 'No clicks yet. Try sharing your short link!',
@@ -375,7 +378,8 @@ const en: Record<MessageKey, string> = {
   'export.csv': 'Download CSV',
   'export.xlsx': 'Download Excel',
   'trash.title': 'Trash',
-  'trash.subtitle': 'Deleted links stay here for {days} days, then they are removed with their stats. Until then nobody else can use their short codes.',
+  'trash.subtitle':
+    'Deleted links stay here for {days} days, then they are removed with their stats. Until then nobody else can use their short codes.',
   'trash.empty': 'Trash is empty',
   'trash.deletedAt': 'Deleted',
   'trash.daysLeft': '{n} days left',
@@ -449,17 +453,22 @@ const en: Record<MessageKey, string> = {
   'tour.welcome.title': 'Welcome to Synerry Short URL',
   'tour.welcome.body': 'In under a minute, see where to shorten links, share QR codes and check click statistics.',
   'tour.url.title': 'Start by pasting a link here',
-  'tour.url.body': 'Paste a long URL and press "Shorten". You get a short link and a QR code instantly, ready to copy or download.',
+  'tour.url.body':
+    'Paste a long URL and press "Shorten". You get a short link and a QR code instantly, ready to copy or download.',
   'tour.options.title': 'Name your link and set dates',
-  'tour.options.body': 'Choose your own ending (alias), add tags to group links, or set when the link starts and expires.',
+  'tour.options.body':
+    'Choose your own ending (alias), add tags to group links, or set when the link starts and expires.',
   'tour.history.title': 'All your links live here',
-  'tour.history.body': 'Search, filter by tag, see click counts, open a link for charts, countries and devices, and download CSV or Excel.',
+  'tour.history.body':
+    'Search, filter by tag, see click counts, open a link for charts, countries and devices, and download CSV or Excel.',
   'tour.trash.title': 'Deleted by mistake? Restore it',
-  'tour.trash.body': 'Deleted links stay in the trash for 30 days, so you can restore them before they are removed for good.',
+  'tour.trash.body':
+    'Deleted links stay in the trash for 30 days, so you can restore them before they are removed for good.',
   'tour.prefs.title': 'Pick your language and theme',
   'tour.prefs.body': 'Switch between Thai and English, and choose light, dark or your device setting.',
   'tour.admin.title': 'Admin tools',
-  'tour.admin.body': 'See system-wide numbers, suspend accounts or links that break the rules, and manage the list of dangerous domains.',
+  'tour.admin.body':
+    'See system-wide numbers, suspend accounts or links that break the rules, and manage the list of dangerous domains.',
   'tour.helpBtn.title': 'See this guide again any time',
   'tour.helpBtn.body': 'Press this button whenever you want to walk through the guide from the start.',
   'notFound.title': 'Page not found',
@@ -481,7 +490,8 @@ const en: Record<MessageKey, string> = {
   'error.already_blocked': 'This domain is already blocked',
   'detail.lockedTitle': 'This link was suspended by an administrator',
   'detail.lockedReason': 'Reason: {reason}',
-  'detail.lockedHint': 'The link does not open and you cannot re-enable it. Contact an administrator if you think this is a mistake.',
+  'detail.lockedHint':
+    'The link does not open and you cannot re-enable it. Contact an administrator if you think this is a mistake.',
   'admin.title': 'Admin',
   'admin.tabOverview': 'Overview',
   'admin.tabUsers': 'Users',
@@ -494,7 +504,8 @@ const en: Record<MessageKey, string> = {
   'admin.linksLast7Days': 'New links in 7 days',
   'admin.blockedDomains': 'Blocked domains',
   'admin.totalClicks': 'Clicks, all users',
-  'admin.overviewHint': 'Use Users to suspend accounts that create scam links, All links to suspend reported links, and Blocklist to stop anyone shortening links to dangerous sites.',
+  'admin.overviewHint':
+    'Use Users to suspend accounts that create scam links, All links to suspend reported links, and Blocklist to stop anyone shortening links to dangerous sites.',
   'admin.searchUsers': 'Search usernames',
   'admin.colUser': 'User',
   'admin.colRole': 'Role',
@@ -508,7 +519,8 @@ const en: Record<MessageKey, string> = {
   'admin.suspend': 'Suspend',
   'admin.unsuspend': 'Reactivate',
   'admin.suspendTitle': 'Suspend {name}?',
-  'admin.suspendMessage': '{name} is logged out everywhere immediately, cannot log in, and all their links stop working. You can reactivate the account later.',
+  'admin.suspendMessage':
+    '{name} is logged out everywhere immediately, cannot log in, and all their links stop working. You can reactivate the account later.',
   'admin.suspendedToast': 'Account suspended',
   'admin.unsuspendedToast': 'Account reactivated',
   'admin.you': '(you)',
@@ -519,13 +531,15 @@ const en: Record<MessageKey, string> = {
   'admin.lock': 'Suspend link',
   'admin.unlock': 'Lift suspension',
   'admin.lockTitle': 'Suspend /{code}?',
-  'admin.lockMessage': 'The link stops opening immediately and its owner cannot re-enable it. The owner will see your reason.',
+  'admin.lockMessage':
+    'The link stops opening immediately and its owner cannot re-enable it. The owner will see your reason.',
   'admin.lockReason': 'Reason',
   'admin.lockReasonPlaceholder': 'e.g. Reported as a scam link',
   'admin.lockedToast': 'Link suspended',
   'admin.unlockedToast': 'Suspension lifted',
   'admin.blockTitle': 'Block a domain',
-  'admin.blockHint': 'Type a domain or paste a full URL. The domain and all its subdomains are blocked for new and existing links right away.',
+  'admin.blockHint':
+    'Type a domain or paste a full URL. The domain and all its subdomains are blocked for new and existing links right away.',
   'admin.blockDomain': 'Domain',
   'admin.blockDomainPlaceholder': 'e.g. phishing-site.com',
   'admin.blockReason': 'Reason (optional)',
@@ -539,105 +553,71 @@ const en: Record<MessageKey, string> = {
   'admin.addedBy': 'Added by {name} on {date}',
 };
 
-// รวมพจนานุกรมทั้งสองภาษา
 const DICTS: Record<Lang, Record<MessageKey, string>> = { th, en };
 
-// ค่าที่ component อื่นอ่านได้
 type I18nValue = {
-  // ภาษาปัจจุบัน
   lang: Lang;
-  // locale ที่ใช้จัดรูปแบบวันที่และตัวเลข
   locale: string;
-  // เปลี่ยนภาษา
   setLang: (lang: Lang) => void;
-  // แปลข้อความจาก key และแทนค่า {ชื่อ} ด้วยค่าที่ส่งมา
   t: (key: MessageKey, vars?: Record<string, string | number>) => string;
 };
 
-// สร้าง context
 const I18nContext = createContext<I18nValue | null>(null);
 
-// ชื่อ key ที่ใช้จำภาษาใน browser
 const STORAGE_KEY = 'synerry.lang';
 
-// อ่านภาษาที่เคยเลือกไว้ ถ้าไม่มีใช้ภาษาไทย
 function initialLang(): Lang {
   try {
-    // อ่านจาก localStorage (บาง browser อาจปิดไว้ จึงครอบด้วย try)
     return localStorage.getItem(STORAGE_KEY) === 'en' ? 'en' : 'th';
   } catch {
-    // อ่านไม่ได้ ใช้ภาษาไทย
     return 'th';
   }
 }
 
-// ตัวครอบแอป เก็บภาษาปัจจุบันไว้ที่เดียว
 export function I18nProvider({ children }: { children: ReactNode }) {
-  // ภาษาปัจจุบัน
   const [lang, setLangState] = useState<Lang>(initialLang);
 
-  // เปลี่ยนภาษาและจำไว้
   const setLang = useCallback((next: Lang) => {
-    // เปลี่ยน state
     setLangState(next);
     try {
-      // จำไว้ใน browser
       localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // จำไม่ได้ก็ไม่เป็นไร
-    }
+    } catch {}
   }, []);
 
-  // ตั้ง lang ของหน้า HTML ให้ตรง ช่วยโปรแกรมอ่านหน้าจอออกเสียงถูกภาษา
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  // สร้างค่าใหม่เฉพาะตอนเปลี่ยนภาษา
   const value = useMemo<I18nValue>(() => {
-    // พจนานุกรมของภาษาปัจจุบัน
     const dict = DICTS[lang];
     return {
       lang,
-      // th-TH ใช้ปีพุทธศักราช en-GB ใช้รูปแบบวัน/เดือน/ปี
       locale: lang === 'th' ? 'th-TH' : 'en-GB',
       setLang,
-      // แปลข้อความ แล้วแทน {ชื่อ} ด้วยค่า
       t: (key, vars) => dict[key].replace(/\{(\w+)\}/g, (_, name: string) => String(vars?.[name] ?? `{${name}}`)),
     };
   }, [lang, setLang]);
 
-  // ส่งค่าให้ component ข้างใน
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
-// ตรวจว่าข้อความ key นี้มีในพจนานุกรมหรือไม่
 export const isMessageKey = (key: string): key is MessageKey => key in th;
 
-// hook สำหรับแปลง error เป็นข้อความตามภาษาปัจจุบัน
 export function useErrorText() {
-  // ฟังก์ชันแปล
   const { t } = useI18n();
-  // คืนฟังก์ชันที่รับ error แล้วคืนข้อความ
   return useCallback(
     (err: unknown) => {
-      // อ่านรหัส error ถ้ามี
-      const code = typeof err === 'object' && err !== null && 'code' in err ? String((err as { code: unknown }).code) : 'unknown';
-      // key ของข้อความ
+      const code =
+        typeof err === 'object' && err !== null && 'code' in err ? String((err as { code: unknown }).code) : 'unknown';
       const key = `error.${code}`;
-      // ถ้ามีคำแปลของรหัสนี้ใช้คำแปล ไม่งั้นใช้ข้อความกลาง
       return isMessageKey(key) ? t(key) : t('error.unknown');
     },
     [t],
   );
 }
 
-// hook สำหรับอ่านภาษาและฟังก์ชันแปลใน component
 export function useI18n() {
-  // อ่าน context
   const ctx = useContext(I18nContext);
-  // ถ้าใช้นอก provider ถือว่าเขียนโค้ดผิด
   if (!ctx) throw new Error('useI18n must be used inside I18nProvider');
-  // คืนค่า
   return ctx;
 }

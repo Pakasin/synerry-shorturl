@@ -1,4 +1,2 @@
-# เก็บไฟล์ข้อความทุกไฟล์เป็นแบบ LF เหมือนกันทุกเครื่อง (เครื่อง Windows และ server Linux ของ Render)
 * text=auto eol=lf
-# ไฟล์รูปเป็น binary ห้ามแปลง
 *.png binary

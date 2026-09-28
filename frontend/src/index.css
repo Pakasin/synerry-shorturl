@@ -1,56 +1,32 @@
-/* นำเข้า Tailwind CSS v4 ทั้งชุด */
-@import "tailwindcss";
-/* นำเข้าฟอนต์ Anuphan (ไทย+อังกฤษ แบบไม่มีหัว ออกแบบโดย Cadson Demak) ที่รวมอยู่ในไฟล์เว็บ ไม่ต้องโหลดจากเว็บอื่น */
-@import "@fontsource-variable/anuphan";
+@import 'tailwindcss';
+@import '@fontsource-variable/anuphan';
 
-/* ให้ class dark: ของ Tailwind ทำงานเมื่อ <html> มี class dark (ธีมเลือกได้เอง ไม่ใช่ตามเครื่องอย่างเดียว) */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* token ของแบรนด์ ใช้เป็น class ได้ เช่น bg-brand text-navy bg-mist */
 @theme {
-  /* แดง Synerry: ปุ่มหลักและลิงก์สั้น ใช้เป็นจุดเน้น ไม่ใช้เป็นพื้นใหญ่ */
   --color-brand: #e31e24;
-  /* แดงเข้มขึ้น ตอนชี้ปุ่ม */
   --color-brand-dark: #c1151b;
-  /* กรมท่า Synerry: สีตัวอักษรหลัก */
   --color-navy: #1b2340;
-  /* พื้นหัวเว็บ หน้า login และปุ่มรอง (กรมท่าคงที่ทั้งสองธีม) */
   --color-header: #1b2340;
-  /* Paper: พื้นป้ายลิงก์ ตาราง และช่องกรอก */
   --color-surface: #ffffff;
-  /* Mist: พื้นหน้า เทาอมฟ้า เข้ากับกรมท่า */
   --color-mist: #f2f4f8;
-  /* Line: เส้นแบ่งและขอบ */
   --color-line: #dce1ea;
-  /* สีข้อมูลในกราฟ แยกจากสีแบรนด์ เพื่อไม่ให้สีแดงถูกอ่านเป็นคำเตือน */
   --color-data: #2a78d6;
-  /* ฟอนต์หลักของทั้งเว็บ พร้อมฟอนต์สำรองของเครื่องที่รองรับภาษาไทย */
-  --font-sans: "Anuphan Variable", "Leelawadee UI", Thonburi, "Noto Sans Thai", system-ui, sans-serif;
-  /* ขนาดตัวอักษรตามสเกลอัตราส่วน 1.25 (major third) */
+  --font-sans: 'Anuphan Variable', 'Leelawadee UI', Thonburi, 'Noto Sans Thai', system-ui, sans-serif;
   --text-display: 2.25rem;
   --text-display--line-height: 1.15;
 }
 
-/* โหมดมืด: เปลี่ยนค่าสีของ token เดิม ทุก class ที่ใช้ token เหล่านี้จะเปลี่ยนตามโดยไม่ต้องแก้ทีละจุด
-   ใช้เฉพาะบนจอ ตอนพิมพ์จะเป็นสีสว่างเสมอ (ประหยัดหมึกและอ่านง่ายบนกระดาษ) */
 @media screen {
   .dark {
-    /* ให้ช่องกรอก scrollbar และปฏิทินของ browser เป็นแบบมืดด้วย */
     color-scheme: dark;
-    /* แดงสว่างขึ้นเล็กน้อยให้อ่านชัดบนพื้นมืด */
     --color-brand: #f0484d;
     --color-brand-dark: #e31e24;
-    /* ตัวอักษรหลักเป็นสีอ่อน */
     --color-navy: #e4e8f2;
-    /* หัวเว็บเข้มกว่าพื้นหน้าเล็กน้อย */
     --color-header: #0a0f1c;
-    /* พื้นป้ายและตาราง */
     --color-surface: #161d31;
-    /* พื้นหน้า */
     --color-mist: #0e1322;
-    /* เส้นแบ่ง */
     --color-line: #2a3350;
-    /* ไล่ระดับสีเทาใหม่: เลขน้อย = เข้ม (พื้น) เลขมาก = สว่าง (ตัวอักษร) */
     --color-slate-50: #121829;
     --color-slate-100: #1c2338;
     --color-slate-200: #2a3350;
@@ -59,7 +35,6 @@
     --color-slate-500: #a3acc4;
     --color-slate-600: #bcc3d6;
     --color-slate-700: #d3d8e5;
-    /* สีของป้ายสถานะและกล่องแจ้งเตือน ปรับให้อ่านชัดบนพื้นมืด */
     --color-green-50: #0f2a1a;
     --color-green-700: #7ee2a0;
     --color-green-800: #7ee2a0;
@@ -73,30 +48,25 @@
   }
 }
 
-/* พื้นหน้า สีตัวอักษร และให้ตัวอักษรไทยมีระยะบรรทัดพอ (สระบน-ล่างไม่ชนกัน) */
 body {
   @apply bg-mist text-navy antialiased;
   line-height: 1.6;
 }
 
-/* ตัวเลขในตารางและลิงก์สั้นให้กว้างเท่ากันทุกหลัก จะได้เรียงตรงกัน */
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
-/* เส้น focus ที่มองเห็นชัดเมื่อใช้คีย์บอร์ด (ไม่แสดงตอนคลิกเมาส์) เส้นจะโค้งตามมุมของ element เอง */
 :focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
 }
-/* ช่องกรอกมีกรอบและวงแหวนตอน focus อยู่แล้ว ไม่ต้องมีเส้นซ้อนอีกชั้น */
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: none;
 }
 
-/* ส่วนที่ browser วาดเอง ให้ใช้สีของระบบด้วย: สีตอนเลือกข้อความ เคอร์เซอร์พิมพ์ และ scrollbar */
 ::selection {
   background: color-mix(in srgb, var(--color-brand) 22%, transparent);
   color: inherit;
@@ -108,12 +78,10 @@ textarea {
 html {
   scrollbar-color: var(--color-slate-300) transparent;
 }
-/* เส้นใต้ลิงก์ห่างจากตัวอักษรเล็กน้อย ไม่ทับสระล่างของภาษาไทย */
 a {
   text-underline-offset: 0.2em;
 }
 
-/* หัวข้อพับเก็บ (details): ใช้ลูกศรที่วาดเอง แทนสามเหลี่ยมเริ่มต้นของ browser */
 summary {
   list-style: none;
 }
@@ -121,41 +89,31 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-/* ป้ายลิงก์: ขอบเส้นประแบบรอยปรุ และรูเจาะครึ่งวงกลมสองข้างที่แนวแบ่ง QR กับข้อความ เหมือนป้ายที่ฉีกออกไปใช้ได้ */
 .link-tag {
-  /* ตำแหน่งอ้างอิงของรูเจาะ */
   position: relative;
-  /* ขอบเส้นประ */
   border: 2px dashed var(--color-line);
-  /* มุมมนมากกว่าส่วนอื่น เพราะเป็นชิ้นหลักของหน้า */
   border-radius: 16px;
-  /* พื้นป้าย */
   background: var(--color-surface);
 }
 
-/* รูเจาะด้านบนและล่าง อยู่ที่แนวของเส้นแบ่ง (กำหนดตำแหน่งแนวนอนผ่านตัวแปร --notch-x) */
 .link-tag::before,
 .link-tag::after {
-  content: "";
+  content: '';
   position: absolute;
   left: var(--notch-x, 50%);
   width: 20px;
   height: 20px;
   margin-left: -10px;
   border-radius: 9999px;
-  /* สีเดียวกับพื้นหน้า ทำให้ดูเหมือนรูทะลุ */
   background: var(--color-mist);
   border: 2px dashed var(--color-line);
 }
-/* รูด้านบน */
 .link-tag::before {
   top: -11px;
 }
-/* รูด้านล่าง */
 .link-tag::after {
   bottom: -11px;
 }
-/* จอแคบ: QR อยู่บนข้อความ จึงไม่แสดงรูเจาะ */
 @media (max-width: 639px) {
   .link-tag::before,
   .link-tag::after {
@@ -163,7 +121,6 @@ summary::-webkit-details-marker {
   }
 }
 
-/* animation จุดเดียวของเว็บ: ป้ายลิงก์เลื่อนขึ้นมาตอนสร้างเสร็จ เพื่อบอกว่าผลลัพธ์อยู่ตรงนี้ (สั้น ไม่ให้ผู้ใช้ต้องรอ) */
 @keyframes tag-in {
   from {
     opacity: 0;
@@ -178,27 +135,22 @@ summary::-webkit-details-marker {
   animation: tag-in 240ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ผู้ใช้ที่ตั้งค่าลดการเคลื่อนไหว ไม่ต้องมี animation */
 @media (prefers-reduced-motion: reduce) {
   .tag-enter {
     animation: none;
   }
 }
 
-/* ตั้งค่าหน้ากระดาษตอนพิมพ์รายงาน */
 @media print {
-  /* กระดาษ A4 ขอบ 12 มม. */
   @page {
     size: A4;
     margin: 12mm;
   }
-  /* พื้นขาว และพิมพ์สีพื้นของกราฟ/ป้ายออกมาด้วย */
   body {
     background: #fff;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
-  /* ไม่ตัดกล่องเนื้อหากลางหน้า */
   section {
     break-inside: avoid;
   }

@@ -1,36 +1,21 @@
-# ไฟล์นี้ใช้สำหรับรันฐานข้อมูลบนเครื่อง local เท่านั้น (production ใช้ Neon)
 services:
-  # service ฐานข้อมูล PostgreSQL หนึ่งตัว ที่ภายในมี 2 database แยกตาม service
   postgres:
-    # ใช้ Postgres 16 แบบ alpine เพราะ image เล็กและเวอร์ชันตรงกับ Neon
     image: postgres:16-alpine
-    # ตั้งชื่อ container ให้จำง่ายเวลาสั่ง docker logs
     container_name: synerry-postgres
-    # ถ้า container ล่ม ให้เริ่มใหม่อัตโนมัติ ยกเว้นเราสั่งหยุดเอง
     restart: unless-stopped
     environment:
-      # user ผู้ดูแลระบบ ใช้แค่ตอนสร้าง database เริ่มต้นเท่านั้น
       POSTGRES_USER: postgres
-      # รหัสผ่านของ user ผู้ดูแลระบบ (ใช้บนเครื่อง local เท่านั้น)
       POSTGRES_PASSWORD: postgres
     ports:
-      # เปิดพอร์ต 5434 บนเครื่อง เพื่อไม่ชนกับ Postgres ตัวอื่นที่อาจใช้ 5432 หรือ 5433 อยู่
-      - "5434:5432"
+      - '5434:5432'
     volumes:
-      # เก็บข้อมูลไว้ใน volume เพื่อไม่ให้ข้อมูลหายเมื่อลบ container
       - pgdata:/var/lib/postgresql/data
-      # สคริปต์ในโฟลเดอร์นี้จะรันอัตโนมัติครั้งแรกที่สร้างฐานข้อมูล
       - ./docker/postgres:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      # ตรวจว่า Postgres พร้อมรับการเชื่อมต่อแล้วหรือยัง
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      # ตรวจทุก 5 วินาที
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
-      # รอผลแต่ละครั้งไม่เกิน 3 วินาที
       timeout: 3s
-      # ล้มเหลวติดกัน 10 ครั้งถือว่าไม่ healthy
       retries: 10
 
-# ประกาศ volume ที่ใช้เก็บข้อมูลฐานข้อมูล
 volumes:
   pgdata:
