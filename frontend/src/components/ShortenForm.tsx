@@ -7,11 +7,11 @@ import { TagInput } from './TagInput';
 import { buttonCls, inputCls } from './styles';
 import { ConfirmDialog, FieldError } from './ui';
 
-export function ShortenForm({ onCreated }: { onCreated: (link: Link) => void }) {
+export function ShortenForm({ onCreated, initialUrl = '' }: { onCreated: (link: Link) => void; initialUrl?: string }) {
   const { t } = useI18n();
   const errorText = useErrorText();
   const fmt = useFormat();
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState(initialUrl);
   const [alias, setAlias] = useState('');
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);

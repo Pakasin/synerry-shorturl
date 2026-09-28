@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Link as RouterLink } from 'react-router';
 import { api, type Link, type Summary } from '../api';
+import { takePendingUrl } from '../pendingLink';
 import { useFormat } from '../format';
-import { useI18n } from '../i18n';
+import { useErrorText, useI18n } from '../i18n';
 import { ShortenForm } from '../components/ShortenForm';
 import { LinkTag } from '../components/LinkTag';
 import { buttonCls } from '../components/styles';
@@ -10,8 +12,10 @@ import { Notice, StatStrip } from '../components/ui';
 
 export function Dashboard() {
   const { t } = useI18n();
+  const errorText = useErrorText();
   const fmt = useFormat();
   const [created, setCreated] = useState<Link | null>(null);
+  const [retryUrl, setRetryUrl] = useState('');
   const [summary, setSummary] = useState<Summary | null>(null);
 
   const loadSummary = useCallback(() => {
@@ -27,6 +31,20 @@ export function Dashboard() {
     loadSummary();
   };
 
+  useEffect(() => {
+    const pendingUrl = takePendingUrl();
+    if (!pendingUrl) return;
+    api<{ link: Link }>('/links', { method: 'POST', body: { url: pendingUrl } })
+      .then((r) => {
+        setCreated(r.link);
+        loadSummary();
+      })
+      .catch((err) => {
+        setRetryUrl(pendingUrl);
+        toast.error(errorText(err));
+      });
+  }, [loadSummary, errorText]);
+
   const topMax = Math.max(1, ...(summary?.topLinks.map((l) => l.clicks ?? 0) ?? [0]));
 
   return (
@@ -34,7 +52,7 @@ export function Dashboard() {
       <section className="max-w-3xl pt-2">
         <h1 className="text-[1.75rem] font-bold leading-tight sm:text-display">{t('shorten.title')}</h1>
         <p className="mb-6 mt-2 max-w-[60ch] text-slate-600">{t('shorten.subtitle')}</p>
-        <ShortenForm onCreated={onCreated} />
+        <ShortenForm key={retryUrl} initialUrl={retryUrl} onCreated={onCreated} />
       </section>
 
       {created && (

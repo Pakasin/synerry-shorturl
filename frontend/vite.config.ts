@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-const shortBaseUrl = (process.env.SHORT_BASE_URL ?? 'http://localhost:3002').replace(/\/+$/, '');
+const shortBaseUrl = (process.env.SHORT_BASE_URL ?? 'https://synerry-redirect.onrender.com').replace(/\/+$/, '');
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
