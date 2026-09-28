@@ -291,6 +291,13 @@ const th = {
   'admin.customEmpty': 'ยังไม่มีโดเมนที่ผู้ดูแลเพิ่ม',
   'admin.builtInList': 'รายการที่ติดมากับระบบ (บริการย่อลิงก์อื่นและโดเมนทดสอบ) ลบไม่ได้',
   'admin.addedBy': 'เพิ่มโดย {name} เมื่อ {date}',
+  'admin.feedTitle': 'รายการภัยคุกคามจากภายนอก',
+  'admin.feedCount': 'บล็อก {count} โดเมนจากฟีดภัยคุกคาม',
+  'admin.feedUpdated': 'อัปเดตล่าสุดเมื่อ {date}',
+  'admin.feedNever': 'ยังไม่เคยอัปเดต',
+  'admin.feedRefresh': 'อัปเดตตอนนี้',
+  'admin.feedRefreshing': 'กำลังอัปเดต...',
+  'admin.feedRefreshedToast': 'อัปเดตรายการภัยคุกคามแล้ว',
 };
 
 export type MessageKey = keyof typeof th;
@@ -591,6 +598,13 @@ const en: Record<MessageKey, string> = {
   'admin.customEmpty': 'No domains added by admins yet',
   'admin.builtInList': 'Built-in list (other link shorteners and test domains), cannot be removed',
   'admin.addedBy': 'Added by {name} on {date}',
+  'admin.feedTitle': 'External threat feeds',
+  'admin.feedCount': '{count} domains blocked from threat feeds',
+  'admin.feedUpdated': 'Last updated {date}',
+  'admin.feedNever': 'Never updated yet',
+  'admin.feedRefresh': 'Refresh now',
+  'admin.feedRefreshing': 'Refreshing...',
+  'admin.feedRefreshedToast': 'Threat feed list refreshed',
 };
 
 const DICTS: Record<Lang, Record<MessageKey, string>> = { th, en };

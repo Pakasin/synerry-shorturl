@@ -5,7 +5,7 @@ import { apiError } from '@synerry/shared';
 import { db } from '../db/client';
 import { blockedDomains, links, users } from '../db/schema';
 import { toLinkDto } from '../links/dto';
-import { BUILT_IN_BLOCKED, normalizeDomain, refreshBlocklist } from '../links/blocklist';
+import { BUILT_IN_BLOCKED, getFeedStatus, normalizeDomain, refreshBlocklist, refreshFeedBlocklist } from '../links/blocklist';
 import { notDeleted } from '../links/queries';
 import { deleteUserSessions } from '../auth/session';
 import { requireAuth } from '../middleware/requireAuth';
@@ -205,7 +205,12 @@ export function adminRoutes() {
       .from(blockedDomains)
       .leftJoin(users, eq(users.id, blockedDomains.createdBy))
       .orderBy(desc(blockedDomains.createdAt));
-    return c.json({ builtIn: BUILT_IN_BLOCKED, items: rows });
+    return c.json({ builtIn: BUILT_IN_BLOCKED, items: rows, feed: getFeedStatus() });
+  });
+
+  r.post('/blocklist/refresh-feeds', async (c) => {
+    await refreshFeedBlocklist();
+    return c.json({ feed: getFeedStatus() });
   });
 
   r.post('/blocklist', async (c) => {

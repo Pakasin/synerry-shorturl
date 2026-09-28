@@ -1,13 +1,13 @@
 import { useState, type FormEvent } from 'react';
 import { toast } from 'sonner';
-import { api, ApiError, type BlockedDomain } from '../../api';
+import { api, ApiError, type BlockedDomain, type FeedStatus } from '../../api';
 import { useFormat } from '../../format';
 import { useResource } from '../../hooks';
 import { useErrorText, useI18n } from '../../i18n';
 import { buttonCls, inputCls } from '../../components/styles';
 import { Card, FieldError, LoadError } from '../../components/ui';
 
-type Blocklist = { builtIn: string[]; items: BlockedDomain[] };
+type Blocklist = { builtIn: string[]; items: BlockedDomain[]; feed: FeedStatus };
 
 export function AdminBlocklist() {
   const { t } = useI18n();
@@ -18,6 +18,20 @@ export function AdminBlocklist() {
   const [reason, setReason] = useState('');
   const [domainError, setDomainError] = useState<string | undefined>();
   const [busy, setBusy] = useState(false);
+  const [refreshingFeed, setRefreshingFeed] = useState(false);
+
+  const refreshFeed = async () => {
+    setRefreshingFeed(true);
+    try {
+      await api('/admin/blocklist/refresh-feeds', { method: 'POST' });
+      toast.success(t('admin.feedRefreshedToast'));
+      reload();
+    } catch (err) {
+      toast.error(errorText(err));
+    } finally {
+      setRefreshingFeed(false);
+    }
+  };
 
   const add = async (e: FormEvent) => {
     e.preventDefault();
@@ -102,6 +116,25 @@ export function AdminBlocklist() {
           </ul>
         </Card>
       </section>
+
+      {data && (
+        <section className="space-y-3">
+          <h2 className="text-lg font-bold">{t('admin.feedTitle')}</h2>
+          <Card className="flex flex-wrap items-center justify-between gap-3 p-5">
+            <div className="text-sm text-slate-600">
+              <div>{t('admin.feedCount', { count: data.feed.domainCount })}</div>
+              <div>
+                {data.feed.lastUpdatedAt
+                  ? t('admin.feedUpdated', { date: fmt.dateTime(data.feed.lastUpdatedAt) })
+                  : t('admin.feedNever')}
+              </div>
+            </div>
+            <button onClick={refreshFeed} disabled={refreshingFeed} className={buttonCls('ghost', 'row')}>
+              {refreshingFeed ? t('admin.feedRefreshing') : t('admin.feedRefresh')}
+            </button>
+          </Card>
+        </section>
+      )}
 
       {data && (
         <section className="space-y-3">

@@ -99,6 +99,12 @@ export type BlockedDomain = {
   createdBy: string | null;
 };
 
+export type FeedStatus = {
+  domainCount: number;
+  lastUpdatedAt: string | null;
+  sources: { name: string; count: number; error: string | null }[];
+};
+
 export type FieldError = { field: string; message: string };
 
 export class ApiError extends Error {
