@@ -162,3 +162,12 @@ summary::-webkit-details-marker {
     break-inside: avoid;
   }
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-navy);
+  box-shadow: 0 0 0 1000px var(--color-surface) inset;
+  caret-color: var(--color-brand);
+  transition: background-color 9999s;
+}

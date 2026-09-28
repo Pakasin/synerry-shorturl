@@ -63,7 +63,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
           <p className="mt-4 max-w-[46ch] text-lg text-white/70">{t('auth.heroBody')}</p>
           <LinkSpecimen />
         </div>
-        <p className="hidden text-sm text-white/50 lg:block">{t('app.tagline')}</p>
+        <p className="hidden text-sm text-white/60 lg:block">{t('app.tagline')}</p>
       </aside>
 
       <main className="flex items-start justify-center px-6 py-10 sm:px-10 lg:items-center">
@@ -163,13 +163,27 @@ function LinkSpecimen() {
       className="mt-10 max-w-xl rounded-2xl bg-white/[0.06] p-6 ring-1 ring-white/10"
       aria-label={t('auth.example')}
     >
-      <p className="text-sm text-white/50">{t('auth.exampleOriginal')}</p>
-      <p className="mt-1 truncate text-white/60 line-through decoration-white/30" title={EXAMPLE_LONG_URL}>
+      <p className="text-sm text-white/70">{t('auth.exampleOriginal')}</p>
+      <p className="mt-1 truncate text-white/80" title={EXAMPLE_LONG_URL}>
         {EXAMPLE_LONG_URL}
       </p>
-      <div className="specimen-reveal mt-5 flex items-center gap-5 border-t border-white/10 pt-5">
+      <div className="my-4 flex items-center gap-3 text-brand" aria-hidden>
+        <svg
+          viewBox="0 0 16 16"
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M8 2v11M3.5 8.5 8 13l4.5-4.5" />
+        </svg>
+        <span className="h-px flex-1 bg-white/10" />
+      </div>
+      <div className="specimen-reveal flex items-center gap-5">
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-white/50">{t('auth.exampleShort')}</p>
+          <p className="text-sm text-white/70">{t('auth.exampleShort')}</p>
           <p className="mt-1 text-4xl font-bold tracking-tight">
             <span className="text-brand">/</span>launch
           </p>
@@ -182,13 +196,13 @@ function LinkSpecimen() {
               />
             ))}
           </div>
-          <p className="mt-2 text-sm text-white/60">{t('auth.exampleClicks', { total })}</p>
+          <p className="mt-2 text-sm text-white/70">{t('auth.exampleClicks', { total })}</p>
         </div>
         <div className="shrink-0 rounded-xl bg-white p-2.5">
           <QRCodeSVG value="https://www.synerry.com/th/" size={96} fgColor="#1b2340" />
         </div>
       </div>
-      <figcaption className="mt-4 text-xs text-white/40">{t('auth.example')}</figcaption>
+      <figcaption className="mt-5 text-xs text-white/60">{t('auth.example')}</figcaption>
     </figure>
   );
 }
