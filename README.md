@@ -25,8 +25,10 @@
 
 | | URL |
 |---|---|
-| หน้าเว็บ | _จะเพิ่มหลัง deploy_ |
-| ลิงก์สั้น (redirect) | _จะเพิ่มหลัง deploy_ |
+| หน้าเว็บ | https://synerry-gateway.onrender.com |
+| ลิงก์สั้น (redirect) | https://synerry-redirect.onrender.com (ตัวอย่าง https://synerry-redirect.onrender.com/synerry) |
+| analytics (ภายใน) | https://synerry-analytics.onrender.com/health |
+| Source code | https://github.com/Pakasin/synerry-shorturl |
 
 | บัญชีทดลอง | ชื่อผู้ใช้ | รหัสผ่าน |
 |---|---|---|
@@ -34,7 +36,7 @@
 | ผู้ดูแลระบบ | `admin` | `Admin@1234` |
 
 > ใช้ Render แบบฟรี service จะหลับเมื่อไม่มีคนใช้ 15 นาที การเปิดครั้งแรกอาจช้า 30-60 วินาที
-> รัน `npm run warmup` ก่อนสาธิตเพื่อปลุกทุก service
+> รัน `npm run warmup:live` ก่อนสาธิตเพื่อปลุกทุก service
 
 ## ตรงกับเกณฑ์การพิจารณา
 
@@ -321,18 +323,56 @@ npm test
 - **ไฟล์ส่งออก** CSV ใส่ `'` หน้าค่าที่ขึ้นต้นด้วย `= + - @` กัน CSV injection
 - **service ภายใน** ต้องแนบ key ตรวจแบบใช้เวลาคงที่ ไม่ได้ตั้ง key ไว้จะปฏิเสธทุกคำขอ
 
-ข้อจำกัดที่รู้อยู่: rate limit เก็บในหน่วยความจำ (ใช้ได้กับ service ตัวเดียว ถ้าขยายหลายเครื่องต้องย้ายไป Redis) และการอ่าน IP จาก `x-forwarded-for` ต้องปรับตาม proxy ของผู้ให้บริการ hosting
+- **IP ผู้ใช้** อ่านจาก header ที่ proxy ของ hosting ตั้งเอง (`True-Client-IP`, `CF-Connecting-IP`) ก่อน แล้วจึงใช้ค่าสุดท้ายของ `X-Forwarded-For` ผู้ใช้ปลอม header เพื่อหลบ rate limit หรือปลอมประเทศในสถิติไม่ได้
+
+ข้อจำกัดที่รู้อยู่: rate limit เก็บในหน่วยความจำ ใช้ได้กับ service ตัวเดียว ถ้าขยายหลายเครื่องต้องย้ายไป Redis
 
 ## Deploy
 
-ใช้ [Neon](https://neon.tech) สำหรับ PostgreSQL และ [Render](https://render.com) สำหรับ 3 service รายละเอียดขั้นตอนจะเพิ่มในหัวข้อนี้หลัง deploy จริง
+ใช้ [Neon](https://neon.tech) (PostgreSQL ฟรี) และ [Render](https://render.com) (web service ฟรี) ทั้งคู่อยู่ region Singapore เพื่อให้ service กับฐานข้อมูลคุยกันเร็ว
 
-สรุปลำดับ
+### 1. Neon
 
-1. Neon: สร้าง project และฐานข้อมูล `gateway_db`, `analytics_db`
-2. Render: สร้าง web service 3 ตัวจาก repository นี้ (gateway, redirect, analytics) ตั้งค่าตัวแปร environment ตามตารางด้านบน
-3. gateway: build หน้าเว็บด้วย `npm run build:web` แล้วรัน migration ก่อนเริ่ม service
-4. ตั้ง `SHORT_BASE_URL` ของ gateway และ `APP_URL` ของ redirect เป็น URL จริงที่ Render ให้มา
+1. สร้าง project เลือก region **AWS Asia Pacific 1 (Singapore)**
+2. ใน branch `production` สร้างฐานข้อมูล `gateway_db` และ `analytics_db`
+3. กด **Connect** เลือกฐานข้อมูลทีละตัว **ปิด Connection pooling** (migration ต้องต่อตรง) แล้วคัดลอก connection string ให้เหลือท้ายเป็น `?sslmode=require`
+
+### 2. Render (Blueprint)
+
+ไฟล์ [`render.yaml`](render.yaml) สร้างทุกอย่างให้ในครั้งเดียว: web service 3 ตัว และ env group `synerry-shared` ที่สุ่ม `INTERNAL_API_KEY` ให้ทุก service ใช้ร่วมกัน
+
+1. Render Dashboard > **New** > **Blueprint** แล้วเลือก repository นี้
+2. กรอกค่าที่ Render ถาม
+
+| service | ตัวแปร | ค่า |
+|---|---|---|
+| synerry-gateway | `DATABASE_URL` | connection string ของ `gateway_db` |
+| synerry-gateway | `SHORT_BASE_URL` | `https://synerry-redirect.onrender.com` |
+| synerry-gateway | `ANALYTICS_URL` | `https://synerry-analytics.onrender.com` |
+| synerry-redirect | `GATEWAY_URL` | `https://synerry-gateway.onrender.com` |
+| synerry-redirect | `APP_URL` | `https://synerry-gateway.onrender.com` |
+| synerry-redirect | `ANALYTICS_URL` | `https://synerry-analytics.onrender.com` |
+| synerry-analytics | `DATABASE_URL` | connection string ของ `analytics_db` |
+
+3. กด **Deploy Blueprint** gateway กับ analytics จะรัน migration เองทุกครั้งที่เริ่ม service และทุกครั้งที่ push ขึ้น `main` Render จะ deploy ใหม่ให้อัตโนมัติ
+
+ถ้าชื่อ service ถูกใช้แล้ว Render จะเติมตัวอักษรท้าย URL ให้แก้ค่าในตารางตาม URL จริงแล้ว redeploy
+
+### 3. บัญชีทดลอง
+
+รันจากเครื่องตัวเองหลัง gateway deploy เสร็จ (ต้องมีตารางก่อน)
+
+```powershell
+$env:DATABASE_URL="<connection string ของ gateway_db>"; npm run db:seed -w @synerry/gateway
+```
+
+### 4. ตรวจสอบ
+
+```bash
+npm run warmup:live
+```
+
+ทั้ง 3 service ต้องตอบ `/health` เป็น `ok` จากนั้นลองเข้าสู่ระบบ ย่อลิงก์ เปิดลิงก์สั้น แล้วดูยอดคลิกในหน้ารายละเอียด
 
 ## เครดิตและสัญญาอนุญาต
 

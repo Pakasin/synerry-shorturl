@@ -22,6 +22,7 @@
     "seed:clicks": "node scripts/seed-clicks.mjs",
     "test": "npm run test --workspaces --if-present",
     "warmup": "node scripts/warmup.mjs",
+    "warmup:live": "node scripts/warmup.mjs https://synerry-gateway.onrender.com https://synerry-redirect.onrender.com https://synerry-analytics.onrender.com",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
